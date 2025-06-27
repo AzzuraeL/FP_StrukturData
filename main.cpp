@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
-#include <termios.h>
 #include <unistd.h>
-#include <conio.h>
+#ifdef _WIN32
+    #include <conio.h>
+#else
+    #include <termios.h>
+#endif
 using namespace std;
 using namespace chrono;
 
@@ -317,7 +320,7 @@ int main() {
                     }
                 }
             }
-             cout << "Tekan ENTER untuk lanjut..."; cin.ignore(); cin.get();
+            cout << "Tekan ENTER untuk lanjut..."; cin.ignore(); cin.get();
         }
     }
     return 0;
