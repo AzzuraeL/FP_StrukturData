@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <termios.h>
 #include <unistd.h>
+#include <conio.h>
 using namespace std;
 using namespace chrono;
 
@@ -150,6 +151,21 @@ void printData(const KTPData& d) {
 
 int getChoiceWithArrow(const vector<string>& options) {
     int pos = 0;
+
+#ifdef _WIN32
+    while (true) {
+        system("cls");
+        cout << "=== PILIH OPSI ===\n";
+        for (int i = 0; i < options.size(); ++i)
+            cout << (i == pos ? "> " : "  ") << options[i] << endl;
+        char c = _getch();
+        if (c == -32) {
+            char arrow = _getch();
+            if (arrow == 72) pos = (pos - 1 + options.size()) % options.size();  // UP
+            else if (arrow == 80) pos = (pos + 1) % options.size();              // DOWN
+        } else if (c == '\r') break;
+    }
+#else
     struct termios oldt, newt;
     tcgetattr(STDIN_FILENO, &oldt);
     newt = oldt;
@@ -164,16 +180,19 @@ int getChoiceWithArrow(const vector<string>& options) {
         char c = getchar();
         if (c == '\033') {
             getchar();
-            switch(getchar()) {
-                case 'A': pos = (pos - 1 + options.size()) % options.size(); break;
-                case 'B': pos = (pos + 1) % options.size(); break;
+            switch (getchar()) {
+                case 'A': pos = (pos - 1 + options.size()) % options.size(); break; // UP
+                case 'B': pos = (pos + 1) % options.size(); break;                  // DOWN
             }
         } else if (c == '\n') break;
     }
 
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+#endif
+
     return pos;
 }
+
 
 int main() {
     vector<string> datasetFiles = {"100.csv", "500.csv", "1000.csv"};
